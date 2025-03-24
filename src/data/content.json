@@ -1,0 +1,16 @@
+{
+  "taskList": {
+    "title": "TODO",
+    "addButton": "Add",
+    "newTaskPlaceholder": "Create a new todo...",
+    "noTasks": "No tasks yet, create a new todo...",
+    "filters": [
+      { "label": "All", "value": "all" },
+      { "label": "Active", "value": "active" },
+      { "label": "Completed", "value": "completed" }
+    ]
+  },
+  "taskItem": {
+    "removeButton": "evwevs"
+  }
+}

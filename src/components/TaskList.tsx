@@ -1,6 +1,9 @@
 'use client'
 import React, {useState, useEffect, FormEvent} from "react";
 import TaskItem from "./TaskItem";
+import content from "@/data/content.json"
+import {FilterType} from "@/components/FilterType";
+import FilterPanel from "@/components/FilterPanel";
 
 type Task = {
     id: number;
@@ -8,26 +11,25 @@ type Task = {
     completed: boolean;
 };
 
-type TaskListProps = {
-    tasks?: Task[];
-};
-
-const TaskList: React.FC<TaskListProps> = ({ tasks = [] }) => {
-    const [taskList, setTaskList] = useState<Task[]>(tasks);
+const TaskList: React.FC = () => {
+    const [taskList, setTaskList] = useState<Task[]>([]);
+    const [filter, setFilter] = useState<FilterType>(FilterType.All)
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const storedTasks = localStorage.getItem("tasks");
         if (storedTasks) {
             setTaskList(JSON.parse(storedTasks));
-        } else if (tasks.length > 0) {
-            setTaskList(tasks);
         }
+        setIsLoading(false);
     }, []);
 
 
     useEffect(() => {
+        if (!isLoading) {
         localStorage.setItem("tasks", JSON.stringify(taskList));
-    }, [taskList]);
+        }
+    }, [taskList, isLoading]);
 
 
     const addTask = (text: string) => {
@@ -46,7 +48,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks = [] }) => {
     const toggleTask = (id: number) => {
         setTaskList(
             taskList.map((task) =>
-                task.id === id ? { ...task, completed: !task.completed } : task
+                task.id === id ? {...task, completed: !task.completed} : task
             )
         );
     };
@@ -60,34 +62,49 @@ const TaskList: React.FC<TaskListProps> = ({ tasks = [] }) => {
         }
     };
 
+    const filteredTasks = taskList.filter((task) => {
+        switch (filter) {
+            case FilterType.Active:
+                return !task.completed;
+            case FilterType.Completed:
+                return task.completed;
+            default:
+                return true;
+        }
+    });
+
     return (
         <div className={'task-list'}>
-        <h1 className={'task-list-title'}>task list</h1>
-    <form className={'add-task-form'} onSubmit={handleFormSubmit}>
-    <input
-        type="text"
-    className={'add-task-input'}
-    name={'taskInput'}
-    placeholder="new task"
-    />
-    <button type={'submit'} className={'add-task-button'}>
-        Add
-        </button>
-        </form>
-    {taskList.length === 0 ? (
-        <p className="task-list-empty">No tasks to display</p>
-    ) : (
-        taskList.map((task) => (
-            <TaskItem
-                key={task.id}
-        task={task}
-        onRemove={removeTask}
-        onToggle={toggleTask}
-        />
-    ))
-    )}
-    </div>
-);
+            <h1 className={'task-list-title'}>{content.taskList.title}</h1>
+            <form className={'add-task-form'} onSubmit={handleFormSubmit}>
+                <input
+                    type="text"
+                    className={'add-task-input'}
+                    name={'taskInput'}
+                    placeholder={content.taskList.newTaskPlaceholder}
+                />
+                <button type={'submit'} className={'add-task-button'}>
+                    {content.taskList.addButton}
+                </button>
+            </form>
+            {isLoading ? (
+                <p className="task-list-loading">Loading tasks...</p>
+            ) : filteredTasks.length === 0 ? (
+                <p className="task-list-empty">{content.taskList.noTasks}</p>
+            ) : (
+                filteredTasks.map((task) => (
+                    <TaskItem
+                        key={task.id}
+                        task={task}
+                        onRemove={removeTask}
+                        onToggle={toggleTask}
+                    />
+                ))
+            )}
+
+            <FilterPanel currentFilter={filter} onFilterChange={setFilter} />
+        </div>
+    );
 };
 
 export default TaskList;
