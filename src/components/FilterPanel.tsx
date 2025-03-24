@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import { FilterType } from './FilterType';
 import content from '../data/content.json';
 
@@ -7,7 +7,8 @@ type FilterPanelProps = {
     onFilterChange: (filter: FilterType) => void;
 };
 
-const FilterPanel: React.FC<FilterPanelProps> = ({ currentFilter, onFilterChange }) => {
+const FilterPanel: React.FC<FilterPanelProps> = memo( ({ currentFilter, onFilterChange }) => {
+    console.log('FilterPanel rendered');
     return (
         <div className="task-filters">
             {content.taskList.filters.map((item) => (
@@ -21,6 +22,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ currentFilter, onFilterChange
             ))}
         </div>
     );
-};
+});
 
 export default FilterPanel;

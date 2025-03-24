@@ -1,9 +1,11 @@
 'use client'
-import React, {useState, useEffect, FormEvent} from "react";
+import React, {useState, useEffect, FormEvent, useCallback, useMemo} from "react";
 import TaskItem from "./TaskItem";
 import content from "@/data/content.json"
 import {FilterType} from "@/components/FilterType";
 import FilterPanel from "@/components/FilterPanel";
+import TasksCounter from "@/components/TasksCounter";
+import ClearCompletedButton from "@/components/ClearCompletedButton";
 
 type Task = {
     id: number;
@@ -15,6 +17,14 @@ const TaskList: React.FC = () => {
     const [taskList, setTaskList] = useState<Task[]>([]);
     const [filter, setFilter] = useState<FilterType>(FilterType.All)
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [taskInput, setTaskInput] = useState("");
+
+    const remainingTasksCount = useMemo(() => {
+        return taskList.filter(task => !task.completed).length;
+    }, [taskList]);
+    const hasCompletedTasks = useMemo(() => {
+        return taskList.some(task => task.completed);
+    }, [taskList]);
 
     useEffect(() => {
         const storedTasks = localStorage.getItem("tasks");
@@ -27,51 +37,50 @@ const TaskList: React.FC = () => {
 
     useEffect(() => {
         if (!isLoading) {
-        localStorage.setItem("tasks", JSON.stringify(taskList));
+            localStorage.setItem("tasks", JSON.stringify(taskList));
         }
     }, [taskList, isLoading]);
 
 
-    const addTask = (text: string) => {
-        const newTask: Task = {
-            id: Date.now(),
-            text,
-            completed: false,
-        };
-        setTaskList([...taskList, newTask]);
-    };
+    const addTask = useCallback((text: string) => {
+        setTaskList(prev => [...prev, { id: Date.now(), text, completed: false }]);
+    }, []);
 
-    const removeTask = (id: number) => {
-        setTaskList(taskList.filter((task) => task.id !== id));
-    };
+    const removeTask = useCallback((id: number) => {
+        setTaskList(prev => prev.filter((task) => task.id !== id));
+    }, []);
 
-    const toggleTask = (id: number) => {
-        setTaskList(
-            taskList.map((task) =>
-                task.id === id ? {...task, completed: !task.completed} : task
-            )
-        );
-    };
+    const toggleTask = useCallback((id: number) => {
+        setTaskList(prev => prev.map(task => task.id === id ? {...task, completed: !task.completed} : task));
+    }, []);
 
-    const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = useCallback((event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const input = event.currentTarget.elements.namedItem("taskInput") as HTMLInputElement;
-        if (input.value.trim()) {
-            addTask(input.value.trim());
-            input.value = "";
+        const trimmedInput = taskInput.trim();
+        if (trimmedInput) {
+            addTask(trimmedInput);
+            setTaskInput('');
         }
-    };
+    }, [addTask, taskInput]);
 
-    const filteredTasks = taskList.filter((task) => {
-        switch (filter) {
-            case FilterType.Active:
-                return !task.completed;
-            case FilterType.Completed:
-                return task.completed;
-            default:
-                return true;
-        }
-    });
+    const clearCompletedTasks = useCallback(() => {
+        setTaskList(prev => prev.filter(task => !task.completed));
+    }, []);
+
+    const filteredTasks = useMemo(() => {
+        return taskList.filter((task) => {
+            switch (filter) {
+                case FilterType.Active:
+                    return !task.completed;
+                case FilterType.Completed:
+                    return task.completed;
+                default:
+                    return true;
+            }
+        });
+    }, [taskList, filter]);
+
+
 
     return (
         <div className={'task-list'}>
@@ -82,6 +91,8 @@ const TaskList: React.FC = () => {
                     className={'add-task-input'}
                     name={'taskInput'}
                     placeholder={content.taskList.newTaskPlaceholder}
+                    value={taskInput}
+                    onChange={(e) => setTaskInput(e.target.value)}
                 />
                 <button type={'submit'} className={'add-task-button'}>
                     {content.taskList.addButton}
@@ -101,8 +112,14 @@ const TaskList: React.FC = () => {
                     />
                 ))
             )}
-
-            <FilterPanel currentFilter={filter} onFilterChange={setFilter} />
+            <div className="task-list-footer">
+                <TasksCounter taskCount={remainingTasksCount}/>
+                <ClearCompletedButton
+                    onClearCompleted={clearCompletedTasks}
+                    disabled={!hasCompletedTasks}
+                />
+            </div>
+            <FilterPanel currentFilter={filter} onFilterChange={setFilter}/>
         </div>
     );
 };

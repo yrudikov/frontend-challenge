@@ -12,5 +12,7 @@
   },
   "taskItem": {
     "removeButton": "evwevs"
-  }
+  },
+  "taskCounter": "items left",
+  "clearButton": "Clear Completed"
 }

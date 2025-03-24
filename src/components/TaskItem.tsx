@@ -1,4 +1,5 @@
-import React from "react";
+import React, {memo} from "react";
+
 
 type Task = {
     id: number;
@@ -12,7 +13,10 @@ type TaskItemProps = {
     onToggle: (id: number) => void;
 };
 
-const TaskItem: React.FC<TaskItemProps> = ({ task, onRemove, onToggle }) => {
+const TaskItem: React.FC<TaskItemProps> = memo( ({ task, onRemove, onToggle }) => {
+
+    console.log('TaskItem rendered');
+
     return (
         <div className={'task-item'}>
             <input
@@ -35,6 +39,6 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onRemove, onToggle }) => {
             </button>
         </div>
     );
-};
+});
 
 export default TaskItem;
