@@ -1,7 +1,7 @@
 import * as React from "react";
-import MainToDo from "@/pages/mainToDo/page";
+import TaskList from "@/components/TaskList/TaskList";
 
 
 export default function Home(): React.ReactElement {
-  return <MainToDo />;
+  return <TaskList />;
 }

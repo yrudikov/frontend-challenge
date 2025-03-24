@@ -1,6 +1,6 @@
 import React, {memo} from 'react';
-import { FilterType } from './FilterType';
-import content from '../data/content.json';
+import { FilterType } from '../FilterType';
+import content from '../../data/content.json';
 
 type FilterPanelProps = {
     currentFilter: FilterType;

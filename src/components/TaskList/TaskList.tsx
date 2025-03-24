@@ -1,11 +1,11 @@
 'use client'
 import React, {useState, useEffect, FormEvent, useCallback, useMemo} from "react";
-import TaskItem from "./TaskItem";
+import TaskItem from "../TaskItem/TaskItem";
 import content from "@/data/content.json"
 import {FilterType} from "@/components/FilterType";
-import FilterPanel from "@/components/FilterPanel";
-import TasksCounter from "@/components/TasksCounter";
-import ClearCompletedButton from "@/components/ClearCompletedButton";
+import FilterPanel from "@/components/TaskListComponents/FilterPanel";
+import TasksCounter from "@/components/TaskListComponents/TasksCounter";
+import ClearCompletedButton from "@/components/TaskListComponents/ClearCompletedButton";
 
 type Task = {
     id: number;
@@ -83,44 +83,46 @@ const TaskList: React.FC = () => {
 
 
     return (
-        <div className={'task-list'}>
-            <h1 className={'task-list-title'}>{content.taskList.title}</h1>
-            <form className={'add-task-form'} onSubmit={handleFormSubmit}>
-                <input
-                    type="text"
-                    className={'add-task-input'}
-                    name={'taskInput'}
-                    placeholder={content.taskList.newTaskPlaceholder}
-                    value={taskInput}
-                    onChange={(e) => setTaskInput(e.target.value)}
-                />
-                <button type={'submit'} className={'add-task-button'}>
-                    {content.taskList.addButton}
-                </button>
-            </form>
-            {isLoading ? (
-                <p className="task-list-loading">Loading tasks...</p>
-            ) : filteredTasks.length === 0 ? (
-                <p className="task-list-empty">{content.taskList.noTasks}</p>
-            ) : (
-                filteredTasks.map((task) => (
-                    <TaskItem
-                        key={task.id}
-                        task={task}
-                        onRemove={removeTask}
-                        onToggle={toggleTask}
+        <section className="task-list-section">
+            <div className={'task-list'}>
+                <h1 className={'task-list-title'}>{content.taskList.title}</h1>
+                <form className={'add-task-form'} onSubmit={handleFormSubmit}>
+                    <input
+                        type="text"
+                        className={'add-task-input'}
+                        name={'taskInput'}
+                        placeholder={content.taskList.newTaskPlaceholder}
+                        value={taskInput}
+                        onChange={(e) => setTaskInput(e.target.value)}
                     />
-                ))
-            )}
-            <div className="task-list-footer">
-                <TasksCounter taskCount={remainingTasksCount}/>
-                <ClearCompletedButton
-                    onClearCompleted={clearCompletedTasks}
-                    disabled={!hasCompletedTasks}
-                />
+                    <button type={'submit'} className={'add-task-button'}>
+                        {content.taskList.addButton}
+                    </button>
+                </form>
+                {isLoading ? (
+                    <p className="task-list-loading">Loading tasks...</p>
+                ) : filteredTasks.length === 0 ? (
+                    <p className="task-list-empty">{content.taskList.noTasks}</p>
+                ) : (
+                    filteredTasks.map((task) => (
+                        <TaskItem
+                            key={task.id}
+                            task={task}
+                            onRemove={removeTask}
+                            onToggle={toggleTask}
+                        />
+                    ))
+                )}
+                <div className="task-list-footer">
+                    <TasksCounter taskCount={remainingTasksCount}/>
+                    <ClearCompletedButton
+                        onClearCompleted={clearCompletedTasks}
+                        disabled={!hasCompletedTasks}
+                    />
+                </div>
+                <FilterPanel currentFilter={filter} onFilterChange={setFilter}/>
             </div>
-            <FilterPanel currentFilter={filter} onFilterChange={setFilter}/>
-        </div>
+        </section>
     );
 };
 
