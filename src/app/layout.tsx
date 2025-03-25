@@ -1,7 +1,7 @@
 import type {Metadata} from "next";
 import "@/styles/globals.css";
 import React from "react";
-import {ThemeProviderWrapper} from "@/components/ThemeProviderWrapper";
+import ThemeProviderWrapper from "@/components/ThemeProviderWrapper";
 
 
 export const metadata: Metadata = {
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
-    
+
     return (
         <html lang="en" suppressHydrationWarning>
         <body >

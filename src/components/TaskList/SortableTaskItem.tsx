@@ -27,15 +27,15 @@ const SortableTaskItem: React.FC<SortableTaskItemProps> = ({ task, onRemove, onT
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
+        touchAction: "none",
     };
 
     return (
-        <div ref={setNodeRef} style={style} {...attributes}>
+        <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
             <TaskItem
                 task={task}
                 onRemove={onRemove}
                 onToggle={onToggle}
-                dragHandleProps={{...listeners}}
             />
         </div>
     );

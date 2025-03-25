@@ -1,12 +1,11 @@
 'use client'
 import React, {useState, useEffect, FormEvent, useCallback, useMemo} from "react";
-import TaskItem from "../TaskItem/TaskItem";
 import content from "@/data/content.json"
 import {FilterType} from "@/components/FilterType";
 import FilterPanel from "@/components/TaskListComponents/FilterPanel";
 import TasksCounter from "@/components/TaskListComponents/TasksCounter";
 import ClearCompletedButton from "@/components/TaskListComponents/ClearCompletedButton";
-import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { DndContext, closestCenter, PointerSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import SortableTaskItem from "./SortableTaskItem";
 import styles from "./TaskList.module.css"
@@ -96,7 +95,10 @@ const TaskList: React.FC = () => {
         }
     }, []);
 
-    const sensors = useSensors(useSensor(PointerSensor));
+    const sensors = useSensors(
+        useSensor(PointerSensor, {activationConstraint: { delay: 150, tolerance: 5 } }),
+        useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 }})
+    );
 
     return (
         <section className={styles.taskListSection}>

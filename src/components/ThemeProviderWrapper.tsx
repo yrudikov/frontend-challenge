@@ -1,12 +1,14 @@
 'use client';
 
 import { ThemeProvider } from 'next-themes';
-import React from "react";
+import React, {memo} from "react";
 
-export function ThemeProviderWrapper({ children }: { children: React.ReactNode }) {
+const ThemeProviderWrapper = ({ children }: { children: React.ReactNode })=> {
     return (
         <ThemeProvider attribute="class" defaultTheme="system">
             {children}
         </ThemeProvider>
     );
 }
+
+export default memo(ThemeProviderWrapper);

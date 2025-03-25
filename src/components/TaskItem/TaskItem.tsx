@@ -11,10 +11,9 @@ type TaskItemProps = {
     task: Task;
     onRemove: (id: number) => void;
     onToggle: (id: number) => void;
-    dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
 };
 
-const TaskItem: React.FC<TaskItemProps> = memo( ({ task, onRemove, onToggle, dragHandleProps }) => {
+const TaskItem: React.FC<TaskItemProps> = memo( ({ task, onRemove, onToggle }) => {
 
     console.log('TaskItem rendered');
 
@@ -28,7 +27,7 @@ const TaskItem: React.FC<TaskItemProps> = memo( ({ task, onRemove, onToggle, dra
             />
             <span
                 style={{ textDecoration: task.completed ? "line-through" : "none"}}
-                className={styles.taskItemText} {...dragHandleProps}
+                className={styles.taskItemText}
             >
         {task.text}
       </span>
