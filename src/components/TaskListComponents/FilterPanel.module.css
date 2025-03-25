@@ -1,0 +1,27 @@
+.filterPanel {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 16px;
+    background: var(--element-bg);
+    border-radius: var(--border-radius);
+}
+
+.filterButton {
+    font-size: 1rem;
+    color: var(--text-disabled);
+}
+
+.active {
+    color: var(--bright-blue);
+}
+
+@media (min-width: 667px) {
+    .filterPanel {
+        padding: 0;
+        width: auto;
+    }
+
+}

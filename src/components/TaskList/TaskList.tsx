@@ -5,11 +5,12 @@ import {FilterType} from "@/components/FilterType";
 import FilterPanel from "@/components/TaskListComponents/FilterPanel";
 import TasksCounter from "@/components/TaskListComponents/TasksCounter";
 import ClearCompletedButton from "@/components/TaskListComponents/ClearCompletedButton";
-import { DndContext, closestCenter, PointerSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import {DndContext, closestCenter, PointerSensor, TouchSensor, useSensor, useSensors} from "@dnd-kit/core";
+import {SortableContext, arrayMove, verticalListSortingStrategy} from "@dnd-kit/sortable";
 import SortableTaskItem from "./SortableTaskItem";
 import styles from "./TaskList.module.css"
 import ThemeButton from "../TaskListComponents/ThemeButton"
+import {useIsMobile} from "@/hooks/useIsMobile";
 
 type Task = {
     id: number;
@@ -22,6 +23,7 @@ const TaskList: React.FC = () => {
     const [filter, setFilter] = useState<FilterType>(FilterType.All)
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [taskInput, setTaskInput] = useState("");
+    const isMobile = useIsMobile();
 
     const remainingTasksCount = useMemo(() => {
         return taskList.filter(task => !task.completed).length;
@@ -47,7 +49,7 @@ const TaskList: React.FC = () => {
 
 
     const addTask = useCallback((text: string) => {
-        setTaskList(prev => [...prev, { id: Date.now(), text, completed: false }]);
+        setTaskList(prev => [...prev, {id: Date.now(), text, completed: false}]);
     }, []);
 
     const removeTask = useCallback((id: number) => {
@@ -85,7 +87,7 @@ const TaskList: React.FC = () => {
     }, [taskList, filter]);
 
     const handleDragEnd = useCallback((event: any) => {
-        const { active, over } = event;
+        const {active, over} = event;
         if (active.id !== over.id) {
             setTaskList(tasks => {
                 const oldIndex = tasks.findIndex(task => task.id === active.id);
@@ -96,8 +98,8 @@ const TaskList: React.FC = () => {
     }, []);
 
     const sensors = useSensors(
-        useSensor(PointerSensor, {activationConstraint: { delay: 150, tolerance: 5 } }),
-        useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 }})
+        useSensor(PointerSensor, {activationConstraint: {delay: 150, tolerance: 5}}),
+        useSensor(TouchSensor, {activationConstraint: {delay: 250, tolerance: 5}})
     );
 
     return (
@@ -108,6 +110,11 @@ const TaskList: React.FC = () => {
                     <ThemeButton/>
                 </div>
                 <form className={styles.taskListForm} onSubmit={handleFormSubmit}>
+
+                    <div className={styles.taskListAddButtonWrapper}>
+                        <button type={'submit'} className={styles.taskListAddButton}>
+                    </button>
+                    </div>
                     <input
                         type="text"
                         className={styles.taskListInput}
@@ -116,36 +123,40 @@ const TaskList: React.FC = () => {
                         value={taskInput}
                         onChange={(e) => setTaskInput(e.target.value)}
                     />
-                    <button type={'submit'} className={styles.taskListAddButton}>
-                        ➕
-                    </button>
+
                 </form>
                 {isLoading ? (
-                    <p className="task-list-loading">Loading tasks...</p>
+                    <p className={styles.taskListEmpty}>{content.taskList.loading}</p>
                 ) : filteredTasks.length === 0 ? (
                     <p className={styles.taskListEmpty}>{content.taskList.noTasks}</p>
                 ) : (
-                    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                        <SortableContext items={filteredTasks.map(task => task.id)} strategy={verticalListSortingStrategy}>
-                            {filteredTasks.map(task => (
-                                <SortableTaskItem
-                                    key={task.id}
-                                    task={task}
-                                    onRemove={removeTask}
-                                    onToggle={toggleTask}
-                                />
-                            ))}
-                        </SortableContext>
-                    </DndContext>
+                    <div className={styles.taskListItems}>
+                        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                            <SortableContext items={filteredTasks.map(task => task.id)}
+                                             strategy={verticalListSortingStrategy}>
+                                {filteredTasks.map(task => (
+                                    <SortableTaskItem
+                                        key={task.id}
+                                        task={task}
+                                        onRemove={removeTask}
+                                        onToggle={toggleTask}
+                                    />
+                                ))}
+                            </SortableContext>
+                        </DndContext>
+                        <div className={styles.taskListFooter}>
+                            <TasksCounter taskCount={remainingTasksCount}/>
+                            {!isMobile ? (<FilterPanel currentFilter={filter} onFilterChange={setFilter}/>) : null}
+                            <ClearCompletedButton
+                                onClearCompleted={clearCompletedTasks}
+                                disabled={!hasCompletedTasks}
+                            />
+                        </div>
+
+                    </div>
                 )}
-                <div className="task-list-footer">
-                    <TasksCounter taskCount={remainingTasksCount}/>
-                    <ClearCompletedButton
-                        onClearCompleted={clearCompletedTasks}
-                        disabled={!hasCompletedTasks}
-                    />
-                </div>
-                <FilterPanel currentFilter={filter} onFilterChange={setFilter}/>
+                {isMobile ? (<FilterPanel currentFilter={filter} onFilterChange={setFilter}/>) : null}
+                <p className={styles.dnd}>{content.dnd}</p>
             </div>
         </section>
     );

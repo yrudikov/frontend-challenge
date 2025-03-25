@@ -19,15 +19,19 @@ const TaskItem: React.FC<TaskItemProps> = memo( ({ task, onRemove, onToggle }) =
 
     return (
         <div className={styles.taskItem}>
-            <input
-                className={styles.taskItemCheckbox}
-                type="checkbox"
-                checked={task.completed}
-                onChange={() => onToggle(task.id)}
-            />
+            <label className={styles.taskItemCheckbox}>
+                <input
+                    type="checkbox"
+                    checked={task.completed}
+                    onChange={() => onToggle(task.id)}
+                />
+                <span className={styles.taskItemCheckmark}>
+                    <img src="/images/icon-check.svg" alt="checked" />
+                </span>
+            </label>
+
             <span
-                style={{ textDecoration: task.completed ? "line-through" : "none"}}
-                className={styles.taskItemText}
+                className={task.completed ? styles.taskItemCompleted : styles.taskItemText}
             >
         {task.text}
       </span>

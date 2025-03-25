@@ -2,17 +2,19 @@
 
 :root {
   --bright-blue: hsl(220, 98%, 61%);
-  --check-gradient: linear-gradient(to right, hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+  --check-gradient: linear-gradient(to left top, hsl(280, 87%, 65%), hsl(192, 100%, 67%));
 
 
-  --background: hsl(0, 0%, 98%);
+  --background: hsl(236, 33%, 92%);
   --foreground: hsl(235, 19%, 35%);
-  --element-bg: hsl(236, 33%, 92%);
+  --element-bg: hsl(0, 0%, 98%);
   --input-bg: hsl(0, 0%, 98%);
   --text-color: hsl(235, 19%, 35%);
   --text-disabled: hsl(236, 9%, 61%);
+
   --border-color: hsl(233, 11%, 84%);
   --shadow-color: rgba(0, 0, 0, 0.1);
+  --border-radius: 6px;
 }
 
 .dark {
@@ -53,6 +55,15 @@ button {
   border: none;
   outline: none;
   font-family: inherit;
+}
+input, textarea, select {
+  outline: none;
+  border: none;
+}
+
+img {
+  max-width: 100%;
+  object-fit: contain;
 }
 
 html.dark {

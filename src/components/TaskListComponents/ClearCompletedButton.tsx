@@ -1,5 +1,6 @@
 import React, {memo} from 'react';
 import content from '@/data/content.json'
+import styles from './ClearCompletedButton.module.css'
 
 type ClearCompletedButtonProps = {
     onClearCompleted: () => void;
@@ -10,7 +11,7 @@ const ClearCompletedButton: React.FC<ClearCompletedButtonProps> = memo( ({ onCle
     console.log('ClearCompletedButton rendered');
     return (
         <button
-            className="clear-completed-button"
+            className={styles.clearCompletedButton}
             onClick={onClearCompleted}
             disabled={disabled}
         >

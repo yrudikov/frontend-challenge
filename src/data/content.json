@@ -8,11 +8,14 @@
       { "label": "All", "value": "all" },
       { "label": "Active", "value": "active" },
       { "label": "Completed", "value": "completed" }
-    ]
+    ],
+    "loading": "Loading..."
   },
   "taskItem": {
     "removeButton": "evwevs"
   },
   "taskCounter": "items left",
-  "clearButton": "Clear Completed"
+  "clearButton": "Clear Completed",
+  "dnd": "Drag and drop to reorder list"
+
 }
