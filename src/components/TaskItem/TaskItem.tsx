@@ -26,7 +26,7 @@ const TaskItem: React.FC<TaskItemProps> = memo( ({ task, onRemove, onToggle }) =
                     onChange={() => onToggle(task.id)}
                 />
                 <span className={styles.taskItemCheckmark}>
-                    <img src="/images/icon-check.svg" alt="checked" />
+                    <img src="/frontend-challenge/images/icon-check.svg" alt="checked" />
                 </span>
             </label>
 
@@ -40,7 +40,7 @@ const TaskItem: React.FC<TaskItemProps> = memo( ({ task, onRemove, onToggle }) =
                 onClick={() => onRemove(task.id)}
             >
                 <img
-                    src="/images/icon-cross.svg"
+                    src="/frontend-challenge/images/icon-cross.svg"
                     alt="Remove"
                     className="button-icon"
                 />

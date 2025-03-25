@@ -1,7 +1,7 @@
 
 .taskListSection {
     width: 100%;
-    background-image: url("/images/bg-mobile-light.jpg") ;
+    background-image: url("/frontend-challenge/images/bg-mobile-light.jpg") ;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: top;
@@ -101,7 +101,7 @@
 
 @media (min-width: 667px) {
     .taskListSection {
-    background-image: url("/images/bg-desktop-light.jpg") ;
+    background-image: url("/frontend-challenge/images/bg-desktop-light.jpg") ;
     }
 
     .taskList {

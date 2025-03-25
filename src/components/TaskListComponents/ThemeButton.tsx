@@ -13,13 +13,13 @@ const ThemeButton = () => {
         >
             {theme === 'dark' ?
                 <img
-                    src="/images/icon-sun.svg"
+                    src="/frontend-challenge/images/icon-sun.svg"
                     alt="Switch to light theme"
                     className="button-icon"
                 />
                 :
                 <img
-                    src="/images/icon-moon.svg"
+                    src="/frontend-challenge/images/icon-moon.svg"
                     alt="Switch to dark theme"
                     className="button-icon"
                 />
