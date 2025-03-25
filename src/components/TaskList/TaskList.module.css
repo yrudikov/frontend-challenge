@@ -1,0 +1,62 @@
+/* @resource: /public/images/bg-mobile-light.jpg */
+.taskListSection {
+    width: 100%;
+    background-image: url("/images/bg-mobile-light.jpg") ;
+    background-size: cover;
+    background-position: top;
+}
+
+.taskList {
+    margin: 0 auto;
+    max-width: 500px;
+    padding: 20px;
+    /*background-color: #f2f2f2;*/
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.taskListHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.taskListTitle {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.taskListEmpty {
+    font-style: italic;
+    color: gray;
+}
+
+.taskListForm {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 10px;
+}
+
+.taskListInput {
+    background-color: #f2f2f2;
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px 0px 0px 5px;
+    font-size: 18px;
+    color: #1a1a1a;
+}
+
+.taskListAddButton {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 0 5px 5px 0px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.taskListAddButton:hover {
+    background-color: #3e8e41;
+}

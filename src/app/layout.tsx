@@ -1,6 +1,7 @@
 import type {Metadata} from "next";
 import "@/styles/globals.css";
 import React from "react";
+import {ThemeProviderWrapper} from "@/components/ThemeProviderWrapper";
 
 
 export const metadata: Metadata = {
@@ -8,15 +9,12 @@ export const metadata: Metadata = {
     description: "Frontend challenge",
 };
 
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
-    children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
+    
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
         <body >
-        {children}
+        <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
         </body>
         </html>
     );

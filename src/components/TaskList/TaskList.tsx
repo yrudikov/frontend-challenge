@@ -6,6 +6,11 @@ import {FilterType} from "@/components/FilterType";
 import FilterPanel from "@/components/TaskListComponents/FilterPanel";
 import TasksCounter from "@/components/TaskListComponents/TasksCounter";
 import ClearCompletedButton from "@/components/TaskListComponents/ClearCompletedButton";
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import SortableTaskItem from "./SortableTaskItem";
+import styles from "./TaskList.module.css"
+import ThemeButton from "../TaskListComponents/ThemeButton"
 
 type Task = {
     id: number;
@@ -80,38 +85,56 @@ const TaskList: React.FC = () => {
         });
     }, [taskList, filter]);
 
+    const handleDragEnd = useCallback((event: any) => {
+        const { active, over } = event;
+        if (active.id !== over.id) {
+            setTaskList(tasks => {
+                const oldIndex = tasks.findIndex(task => task.id === active.id);
+                const newIndex = tasks.findIndex(task => task.id === over.id);
+                return arrayMove(tasks, oldIndex, newIndex);
+            });
+        }
+    }, []);
 
+    const sensors = useSensors(useSensor(PointerSensor));
 
     return (
-        <section className="task-list-section">
-            <div className={'task-list'}>
-                <h1 className={'task-list-title'}>{content.taskList.title}</h1>
-                <form className={'add-task-form'} onSubmit={handleFormSubmit}>
+        <section className={styles.taskListSection}>
+            <div className={styles.taskList}>
+                <div className={styles.taskListHeader}>
+                    <h1 className={styles.taskListTitle}>{content.taskList.title}</h1>
+                    <ThemeButton/>
+                </div>
+                <form className={styles.taskListForm} onSubmit={handleFormSubmit}>
                     <input
                         type="text"
-                        className={'add-task-input'}
+                        className={styles.taskListInput}
                         name={'taskInput'}
                         placeholder={content.taskList.newTaskPlaceholder}
                         value={taskInput}
                         onChange={(e) => setTaskInput(e.target.value)}
                     />
-                    <button type={'submit'} className={'add-task-button'}>
-                        {content.taskList.addButton}
+                    <button type={'submit'} className={styles.taskListAddButton}>
+                        ➕
                     </button>
                 </form>
                 {isLoading ? (
                     <p className="task-list-loading">Loading tasks...</p>
                 ) : filteredTasks.length === 0 ? (
-                    <p className="task-list-empty">{content.taskList.noTasks}</p>
+                    <p className={styles.taskListEmpty}>{content.taskList.noTasks}</p>
                 ) : (
-                    filteredTasks.map((task) => (
-                        <TaskItem
-                            key={task.id}
-                            task={task}
-                            onRemove={removeTask}
-                            onToggle={toggleTask}
-                        />
-                    ))
+                    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                        <SortableContext items={filteredTasks.map(task => task.id)} strategy={verticalListSortingStrategy}>
+                            {filteredTasks.map(task => (
+                                <SortableTaskItem
+                                    key={task.id}
+                                    task={task}
+                                    onRemove={removeTask}
+                                    onToggle={toggleTask}
+                                />
+                            ))}
+                        </SortableContext>
+                    </DndContext>
                 )}
                 <div className="task-list-footer">
                     <TasksCounter taskCount={remainingTasksCount}/>

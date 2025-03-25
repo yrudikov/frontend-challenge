@@ -1,0 +1,35 @@
+.taskItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.taskItemText {
+    flex: 1;
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.taskItemCheckbox {
+    margin-right: 10px;
+}
+
+.taskItemRemoveButton {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.taskItemRemoveButton:hover {
+    background-color: #ac2424;
+}

@@ -1,5 +1,5 @@
 import React, {memo} from "react";
-
+import styles from "./TaskItem.module.css"
 
 type Task = {
     id: number;
@@ -11,31 +11,36 @@ type TaskItemProps = {
     task: Task;
     onRemove: (id: number) => void;
     onToggle: (id: number) => void;
+    dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
 };
 
-const TaskItem: React.FC<TaskItemProps> = memo( ({ task, onRemove, onToggle }) => {
+const TaskItem: React.FC<TaskItemProps> = memo( ({ task, onRemove, onToggle, dragHandleProps }) => {
 
     console.log('TaskItem rendered');
 
     return (
-        <div className={'task-item'}>
+        <div className={styles.taskItem}>
             <input
-                className={'task-item-checkbox'}
+                className={styles.taskItemCheckbox}
                 type="checkbox"
                 checked={task.completed}
                 onChange={() => onToggle(task.id)}
             />
             <span
                 style={{ textDecoration: task.completed ? "line-through" : "none"}}
-                className={'task-item-text'}
+                className={styles.taskItemText} {...dragHandleProps}
             >
         {task.text}
       </span>
             <button
-                className={'task-item-remove-button'}
+                className={styles.taskItemRemoveButton}
                 onClick={() => onRemove(task.id)}
             >
-                Remove
+                <img
+                    src="/images/icon-cross.svg"
+                    alt="Remove"
+                    className="button-icon"
+                />
             </button>
         </div>
     );
