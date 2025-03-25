@@ -10,6 +10,7 @@
   --element-bg: hsl(236, 33%, 92%);
   --input-bg: hsl(0, 0%, 98%);
   --text-color: hsl(235, 19%, 35%);
+  --text-disabled: hsl(236, 9%, 61%);
   --border-color: hsl(233, 11%, 84%);
   --shadow-color: rgba(0, 0, 0, 0.1);
 }
