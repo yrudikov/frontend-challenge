@@ -1,3 +1,11 @@
 .clearCompletedButton {
     color: var(--text-disabled);
 }
+
+.clearCompletedButton:hover {
+    color: var(--text-color);
+}
+
+.clearCompletedButton:disabled {
+    color: var(--text-disabled);
+}

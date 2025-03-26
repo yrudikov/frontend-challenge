@@ -9,11 +9,20 @@
 
 .taskItemText {
     flex: 1;
+    cursor: grab;
 }
+.taskItemText:active {
+    cursor: grabbing;
+}
+
 .taskItemCompleted {
     flex: 1;
     text-decoration: line-through;
     color: var(--text-disabled);
+    cursor: grab;
+}
+.taskItemCompleted:active {
+    cursor: grabbing;
 }
 
 .taskItemCheckbox {
